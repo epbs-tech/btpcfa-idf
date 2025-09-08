@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Montserrat } from "next/font/google"
 import { League_Spartan } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/hooks/use-auth"
 import { Suspense } from "react"
 import "./globals.css"
@@ -35,7 +34,6 @@ export default function RootLayout({
         <Suspense fallback={<div>Loading...</div>}>
           <AuthProvider>{children}</AuthProvider>
         </Suspense>
-        <Analytics />
       </body>
     </html>
   )
