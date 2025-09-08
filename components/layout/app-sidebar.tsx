@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { useAuth } from "@/hooks/use-auth"
 import { getRoleDisplayName, hasRole } from "@/lib/auth"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -36,6 +37,7 @@ import Image from "next/image"
 
 export function AppSidebar() {
   const { user, logout } = useAuth()
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false)
   const pathname = usePathname()
   const { isMobile } = useSidebar()
 
@@ -198,9 +200,23 @@ export function AppSidebar() {
                     Mon profil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => logout()}>
+                <DropdownMenuItem
+                  onClick={async () => {
+                    setIsLoggingOut(true)
+                    await logout()
+                    setIsLoggingOut(false)
+                  }}
+                  disabled={isLoggingOut}
+                >
                   <LogOut />
-                  Se déconnecter
+                  {isLoggingOut ? (
+                    <span className="ml-2 flex items-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /></svg>
+                      Déconnexion...
+                    </span>
+                  ) : (
+                    "Se déconnecter"
+                  )}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

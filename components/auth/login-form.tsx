@@ -44,18 +44,18 @@ export function LoginForm() {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center">
-            <div className="p-3 bg-primary rounded-lg">
+            <div className="p-3 rounded-lg">
               <Image
                 src="/logo-btp-cfa.png"
                 alt="Logo BTP CFA"
                 width={48}
                 height={48}
-                className="h-12 w-12 object-contain"
+                className="h-12 w-full"
               />
             </div>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">BTP CFA IDF</h1>
-          <p className="text-muted-foreground">Suivi Socio-Professionnel</p>
+          {/* <h1 className="text-2xl font-bold text-foreground">BTP CFA IDF</h1> */}
+          <p className="text-muted-foreground">Suivi Educatif et Socio-Professionnel</p>
         </div>
 
         <Card>
