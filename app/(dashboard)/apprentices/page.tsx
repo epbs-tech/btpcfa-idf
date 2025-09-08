@@ -240,7 +240,7 @@ export default function ApprenticesPage() {
                                 ? "À risque"
                                 : "Inactif"}
                           </Badge>
-                          <Badge variant={getRiskBadgeVariant(apprentice.riskLevel)} size="sm">
+                          <Badge variant={getRiskBadgeVariant(apprentice.riskLevel)}>
                             Risque{" "}
                             {apprentice.riskLevel === "high"
                               ? "élevé"

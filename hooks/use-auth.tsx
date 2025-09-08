@@ -9,6 +9,7 @@ import {
   login as authLogin,
   logout as authLogout,
 } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>
@@ -68,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading: false,
         isAuthenticated: false,
       })
+      redirect("/")
     } catch (error) {
       console.error("Logout error:", error)
     }

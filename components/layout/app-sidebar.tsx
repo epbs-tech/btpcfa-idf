@@ -11,10 +11,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
-  Building2,
   LayoutDashboard,
   FileText,
   Calendar,
@@ -22,14 +25,19 @@ import {
   BarChart3,
   Settings,
   LogOut,
-  ChevronUp,
+  ChevronsUpDown,
   User,
   BookOpen,
   MessageSquare,
 } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 export function AppSidebar() {
   const { user, logout } = useAuth()
+  const pathname = usePathname()
+  const { isMobile } = useSidebar()
 
   if (!user) return null
 
@@ -82,9 +90,9 @@ export function AppSidebar() {
       roles: ["ssp"] as const,
     },
     {
-      title: "Planification",
+      title: "Événements",
       icon: Calendar,
-      href: "/planning",
+      href: "/events",
       roles: ["ssp", "admin"] as const,
     },
 
@@ -96,9 +104,9 @@ export function AppSidebar() {
       roles: ["admin"] as const,
     },
     {
-      title: "Rapports",
+      title: "Analytiques",
       icon: BarChart3,
-      href: "/reports",
+      href: "/analytics",
       roles: ["ssp", "admin"] as const,
     },
     {
@@ -109,35 +117,46 @@ export function AppSidebar() {
     },
   ]
 
-  const visibleItems = navigationItems.filter((item) => hasRole(user, item.roles))
+  const visibleItems = navigationItems.filter((item) => hasRole(user, [...item.roles]))
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-4 py-2">
-          <div className="p-2 bg-primary rounded-lg">
-            <Building2 className="h-5 w-5 text-primary-foreground" />
+        <div className="flex items-center gap-2 px-2 py-2">
+          <div className="p-0 rounded-lg">
+            <Image
+              src="/icon-btp-cfa.png"
+              alt="BTP CFA IDF"
+              width={32}
+              height={32}
+              className="h-18 w-18 object-contain"
+            />
           </div>
-          <div>
+          <div className="flex flex-col">
             <h2 className="font-semibold text-sm">BTP CFA IDF</h2>
-            <p className="text-xs text-muted-foreground">Suivi Socio-Pro</p>
+            <p className="text-xs text-muted-foreground">Suivi Educatif et Socio-Pro</p>
           </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarMenu>
-          {visibleItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild>
-                <a href={item.href} className="flex items-center gap-2">
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {visibleItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={pathname === item.href}>
+                    <Link href={item.href}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
@@ -145,25 +164,42 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="w-full">
-                  <Avatar className="h-6 w-6">
-                    <AvatarFallback className="text-xs">
-                      {user.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 text-left">
-                    <p className="text-sm font-medium">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{getRoleDisplayName(user.role)}</p>
-                  </div>
-                  <ChevronUp className="h-4 w-4" />
-                </SidebarMenuButton>
+                <button className="w-full">
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarFallback className="rounded-lg">
+                        {user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">{user.name}</span>
+                      <span className="truncate text-xs">{getRoleDisplayName(user.role)}</span>
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4" />
+                  </SidebarMenuButton>
+                </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+
+              <DropdownMenuContent
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                side={isMobile ? "bottom" : "right"}
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">
+                    <User />
+                    Mon profil
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => logout()}>
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut />
                   Se déconnecter
                 </DropdownMenuItem>
               </DropdownMenuContent>

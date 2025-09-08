@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth } from "@/hooks/use-auth"
-import { Loader2, Building2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
+import Image from "next/image"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -44,7 +45,13 @@ export function LoginForm() {
         <div className="text-center space-y-2">
           <div className="flex justify-center">
             <div className="p-3 bg-primary rounded-lg">
-              <Building2 className="h-8 w-8 text-primary-foreground" />
+              <Image
+                src="/logo-btp-cfa.png"
+                alt="Logo BTP CFA"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
             </div>
           </div>
           <h1 className="text-2xl font-bold text-foreground">BTP CFA IDF</h1>
