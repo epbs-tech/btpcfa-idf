@@ -5,6 +5,8 @@ import { League_Spartan } from "next/font/google"
 import { AuthProvider } from "@/hooks/use-auth"
 import { Suspense } from "react"
 import "./globals.css"
+import { DevicePreviewProvider } from '@/components/device-preview/device-preview-provider'
+import { DevicePreviewWrapper } from "@/components/device-preview/device-preview-wrapper"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -31,9 +33,13 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={`font-sans ${montserrat.variable} ${leagueSpartan.className} antialiased`}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <AuthProvider>{children}</AuthProvider>
-        </Suspense>
+        <DevicePreviewProvider>
+          <DevicePreviewWrapper>
+            <Suspense fallback={<div>Loading...</div>}>
+              <AuthProvider>{children}</AuthProvider>
+            </Suspense>
+          </DevicePreviewWrapper>
+        </DevicePreviewProvider>
       </body>
     </html>
   )
